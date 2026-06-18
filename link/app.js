@@ -254,18 +254,13 @@ const setAIStatus = (message, isError = false) => {
 }
 
 // ============ GROQ API INTEGRATION ============
-// Groq API Key - Hardcoded (Keep this secret!)
-const GROQ_API_KEY = '';
+// GrmfuiSoq API Key - Hardcoded (Keep this secret!)
 const createGroqRequest = async (prompt, maxTokens = 1024) => {
-    if (!GROQ_API_KEY || !GROQ_API_KEY.startsWith('gsk_')) {
-        throw new Error('Groq API key not configured. Update GROQ_API_KEY in app.js');
-    }
 
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const response = await fetch('/.netlify/functions/groq', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${GROQ_API_KEY}`
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             model: 'llama-3.3-70b-versatile',
@@ -284,7 +279,6 @@ const createGroqRequest = async (prompt, maxTokens = 1024) => {
     const data = await response.json();
     return data.choices?.[0]?.message?.content?.trim();
 };
-
 const generateAISummary = async () => {
     setAIStatus('Generating summary...', false);
     const careerBrief = aiCareerBriefElem?.value.trim();
